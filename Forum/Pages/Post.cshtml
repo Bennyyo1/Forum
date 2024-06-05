@@ -1,0 +1,186 @@
+﻿@page
+@model Forum.Pages.PostModel
+
+<a href="/Subcategory?id=@Model.SubCategory.Id" style="text-decoration: none; color: inherit;">
+	<h3>@Model.SubCategory.Name</h3>
+</a>
+
+<div class="card m-2" style="width: 50rem">
+	<div class="card-body">
+		<div class="d-flex align-items-start">
+			<img class="card-img-top profile-picture" src="~/userImages/@Model.Post.User.ProfilePicture" />
+			<br />
+			<br />
+			<div class="ml-5">
+				<h5 class="card-title">@Model.Post.Title</h5>
+				<p class="card-text">@Model.Post.TextContext</p>
+				@if (!string.IsNullOrEmpty(Model.Post.PostImagePath))
+				{
+					<img src="~/postImages/@Model.Post.PostImagePath" alt="Post image" class="post-picture" />
+				}
+				<br />
+				<br />
+
+			</div>
+
+		</div>
+		<form method="post" class="d-inline">
+			<input type="hidden" name="postId" value="@Model.Post.Id" />
+			<button type="submit" name="submitButton" value="UpvotePost" class="btn btn-sm btn-outline-success">Upvote</button>
+		</form>
+		<span>@Model.Post.Votes</span>
+		<form method="post" class="d-inline">
+			<input type="hidden" name="postId" value="@Model.Post.Id" />
+			<button type="submit" name="submitButton" value="DownvotePost" class="btn btn-sm btn-outline-danger">Downvote</button>
+		</form>
+		<br />
+		<br />
+		<form method="post" class="d-inline">
+			<input type="hidden" name="postId" value="@Model.Post.Id" />
+			<button type="submit" name="submitButton" value="ReportPost" class="btn btn-sm btn-outline-warning">Report</button>
+		</form>
+
+		<div class="card-footer">
+			<p>Posted by @Model.Post.User.NickName on @Model.Post.Date</p>
+		</div>
+	</div>
+
+
+	<!-- Comments list -->
+	@if (Model.Comments != null && Model.Comments.Any())
+	{
+		@foreach (var comment in Model.Comments)
+		{
+			<div class="card comment">
+				<div class="card-body">
+					<div class="d-flex align-items-start">
+						<img class="card-img-top profile-picture" src="~/userImages/@comment.User.ProfilePicture" />
+						<div class="ml-5">
+							<p class="card-text">@comment.Text</p>
+						</div>
+
+					
+					</div>
+
+					<form method="post" class="d-inline">
+						<input type="hidden" name="postId" value="@Model.Post.Id" />
+						<input type="hidden" name="commentId" value="@comment.Id" />
+						<button type="submit" name="submitButton" value="UpvoteComment" class="btn btn-sm btn-outline-success">Upvote</button>
+					</form>
+
+					<span>@comment.Votes</span>
+
+					<form method="post" class="d-inline">
+						<input type="hidden" name="postId" value="@Model.Post.Id" />
+						<input type="hidden" name="commentId" value="@comment.Id" />
+						<button type="submit" name="submitButton" value="DownvoteComment" class="btn btn-sm btn-outline-danger">Downvote</button>
+					</form>
+					<br />
+					<br />
+
+					<form method="post" class="d-inline">
+						<input type="hidden" name="postId" value="@Model.Post.Id" />
+						<input type="hidden" name="commentId" value="@comment.Id" />
+						<button type="submit" name="submitButton" value="ShowReplyForm" class="btn btn-sm btn-outline-primary">Reply</button>
+					</form>
+
+					@if (Model.ReplyToCommentId == comment.Id)
+					{
+						<form method="post">
+							<textarea name="ReplyText" cols="40" rows="3" class="form-control"></textarea>
+							<input type="hidden" name="postId" value="@Model.Post.Id" />
+							<input type="hidden" name="commentId" value="@comment.Id" />
+							<button type="submit" name="submitButton" class="btn btn-sm btn-success mt-2" value="SubmitReply">Add Reply</button>
+						</form>
+
+
+					}
+					<form method="post" class="d-inline">
+						<input type="hidden" name="postId" value="@Model.Post.Id" />
+						<input type="hidden" name="commentId" value="@comment.Id" />
+						<button type="submit" name="submitButton" value="ReportComment" class="btn btn-sm btn-outline-warning">Report</button>
+					</form>
+
+					
+
+
+				</div>
+
+				
+
+
+				<p class="card-footer">
+					Commented by @comment.User.NickName on @comment.Date
+					
+					
+					
+
+					<!-- Display replies -->
+					@if (comment.Replies != null && comment.Replies.Any())
+					{
+						foreach (var reply in comment.Replies)
+						{
+							<div class="card reply">
+								<div class="card-body">
+									<div class="d-flex align-items-start">
+										<!-- Display profile picture on the left -->
+										<img class="card-img-top profile-picture" src="~/userImages/@reply.User.ProfilePicture" />
+										<div class="ml-5">
+											<p class="card-text">@reply.Text</p>
+										</div>
+									</div>
+									
+									
+								</div>
+								<div class="card-footer">
+									<form method="post" class="d-inline">
+										<input type="hidden" name="postId" value="@Model.Post.Id" />
+										<input type="hidden" name="commentId" value="@comment.Id" />
+										<input type="hidden" name="replyId" value="@reply.Id" />
+										<button type="submit" name="submitButton" value="UpvoteReply" class="btn btn-sm btn-outline-success">Upvote</button>
+									</form>
+									<span>@reply.Votes</span>
+									<form method="post" class="d-inline">
+										<input type="hidden" name="postId" value="@Model.Post.Id" />
+										<input type="hidden" name="commentId" value="@comment.Id" />
+										<input type="hidden" name="replyId" value="@reply.Id" />
+										<button type="submit" name="submitButton" value="DownvoteReply" class="btn btn-sm btn-outline-danger">Downvote</button>
+									</form>
+									<br />
+									<br />
+									<form method="post" class="d-inline">
+										<input type="hidden" name="postId" value="@Model.Post.Id" />
+										<input type="hidden" name="commentId" value="@comment.Id" />
+										<input type="hidden" name="replyId" value="@reply.Id" />
+										<button type="submit" name="submitButton" value="ReportReply" class="btn btn-sm btn-outline-warning">Report</button>
+									</form>
+
+									<p>Replied by @reply.User.NickName on @reply.Date</p>
+								</div>
+							</div>
+						}
+					}
+			</div>
+
+		}
+	}
+
+	@if (User.Identity.IsAuthenticated) //Check if user is logged in
+	{
+		
+		<form method="post">
+			<div class="card-footer">
+				
+				<textarea asp-for="Comment.Text" cols="40" rows="5"></textarea>
+				<input type="hidden" name="postId" value="@Model.Post.Id" />
+				<br />
+				<input type="submit" name="submitButton" class="btn custom-btn" value="AddComment" />
+			</div>
+		</form>
+		
+	}
+	else
+	{
+		<p>You need to <a href="/Identity/Account/Login">login</a> to add a new comment.</p>
+	}
+</div>

@@ -1,0 +1,44 @@
+﻿@page "/Messages"
+@model Forum.Pages.MessagesModel
+@{
+
+}
+
+<div>
+    <h2>Messages Page</h2>
+
+    
+    <form method="post" asp-page-handler="SendMessage">
+        <div class="form-group">
+            <label for="nicknames">Search and Select Nicknames:</label>
+            <input type="text" id="nicknames" name="nicknames" class="form-control" placeholder="Enter nicknames separated by commas">
+        </div>
+        <div class="form-group">
+            <label for="message">Message:</label>
+            <textarea id="message" name="message" class="form-control" rows="3" placeholder="Enter your message"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Send Message</button>
+    </form>
+</div>
+
+
+<!-- Display user messages -->
+@if (Model.UserMessages != null && Model.UserMessages.Count > 0)
+{
+    <ul>
+        @foreach (var message in Model.UserMessages)
+        {
+            <li>
+                @message
+                <form method="post" asp-page-handler="DeleteMessage" asp-route-message="@message">
+                    <button type="submit" class="btn btn-link text-danger">Delete</button>
+                </form>
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <p>No messages found.</p>
+}
+

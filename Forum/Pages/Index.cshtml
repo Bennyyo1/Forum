@@ -1,0 +1,42 @@
+﻿@page
+@model IndexModel
+@{
+	ViewData["Title"] = "Home page";
+}
+
+
+		<div class="header-picture">
+			<img src="~/userImages/flyingdisc.jpg" class="img-fluid rounded-circle">
+		<h2>DISC-ussions</h2>
+		</div>
+		<br />
+		<br />
+
+	<div class="text-center">
+
+		@if (Model.MyUser != null) //Logged in user
+		{
+			<h1 class="display-7">Welcome @Model.MyUser.FirstName @Model.MyUser.LastName</h1>
+		}
+
+		<br />
+		@if (Model.Categories != null && Model.Categories.Count > 0)
+		{
+			@foreach (var category in Model.Categories)
+			{
+				<div class="card-index">
+					<h2 class="card-title">@category.Name</h2>
+
+					@if (category.SubCategories != null && category.SubCategories.Count > 0)
+					{
+						@foreach (var subCategory in category.SubCategories)
+						{
+							<h5>@subCategory.Name</h5>
+							<a href="/Subcategory?id=@subCategory.Id">View Posts</a>
+
+						}
+					}
+				</div>
+			}
+		}
+	</div>

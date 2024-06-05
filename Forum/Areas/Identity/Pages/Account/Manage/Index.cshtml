@@ -1,0 +1,57 @@
+﻿    @page
+    @model IndexModel
+@{
+	ViewData["Title"] = "Profile";
+	ViewData["ActivePage"] = ManageNavPages.Index;
+}
+
+<h3>@ViewData["Title"]</h3>
+<partial name="_StatusMessage" for="StatusMessage" />
+<div class="row">
+	<div class="col-md-6">
+		<form id="profile-form" method="post" enctype="multipart/form-data">
+			<div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+			<div class="form-floating mb-3">
+				<input asp-for="Username" class="form-control" placeholder="Please choose your username." disabled />
+				<label asp-for="Username" class="form-label"></label>
+			</div>
+			<div class="form-floating mb-3">
+				<input asp-for="Input.PhoneNumber" class="form-control" placeholder="Please enter your phone number." />
+				<label asp-for="Input.PhoneNumber" class="form-label"></label>
+				<span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+			</div>
+			
+			<br />
+			@if (Model.Input.ProfilePicturePath != null)
+			{
+				<div class="form-group">
+					<label>Current Profile Picture</label>
+					<br />
+					<img src="~/userImages/@Model.Input.ProfilePicturePath" class="current-picture" />
+				</div>
+			}
+			<br />
+			<div class="form-group">
+				<label for="ProfilePicture">Change Profile Picture</label>
+				<br />
+				<input asp-for="ProfilePicture" type="file" name="ProfilePicture" />
+				<span asp-validation-for="ProfilePicture" class="text-danger"></span>
+			</div>
+			<br />
+			<br />
+			<h4>About me</h4>
+			<div class="form-floating mb-3">
+				<textarea asp-for="Input.AboutMe" class="form-control" placeholder="Tell us about yourself..."></textarea>
+				<label asp-for="Input.AboutMe" class="form-label">About Me</label>
+			</div>
+
+
+			<button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary">Save</button>
+		</form>
+	</div>
+</div>
+
+
+@section Scripts {
+	<partial name="_ValidationScriptsPartial" />
+}

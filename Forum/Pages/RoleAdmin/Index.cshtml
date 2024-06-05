@@ -1,0 +1,132 @@
+﻿@page
+@model Forum.Pages.RoleAdmin.IndexModel
+@{
+}
+
+
+<table class="table">
+	<tr>
+		<th>Username</th>
+		@if (Model.Roles != null)
+		{
+			@foreach (var role in Model.Roles)
+			{
+				<th>@role.Name</th>
+			}
+		}
+	</tr>
+
+	@if (Model.Users != null)
+	{
+		@foreach (var user in Model.Users)
+		{
+			<tr>
+				<td>@user.UserName</td>
+
+				@foreach (var role in Model.Roles)
+				{
+					if (await Model._userManager.IsInRoleAsync(user, role.Name))
+					{
+						<td><a href="?RemoveUserId=@user.Id&RoleName=@role.Name">Yes</a></td>
+					}
+					else
+					{
+						<td><a href="?AddUserId=@user.Id&RoleName=@role.Name">No</a></td>
+					}
+				}
+
+			</tr>
+		}
+		
+	}
+	
+	
+		
+	
+
+</table>
+
+<form method="post">
+	<label for="RoleName">New role</label>
+	<input name="RoleName" id="RoleName"></input>
+	<input type="submit" name="submitButton" value="NewRole" />
+
+</form>
+<br />
+<br />
+@if (Model.Categories != null) //om listan av kategorier inte är tom
+{
+	@foreach (var Category in Model.Categories)
+	{
+		<div class="card">
+
+			<h5 class="card-title">@Category.Name</h5>
+			<a asp-route-deleteCategoryId="@Category.Id" class="btn btn-primary">Remove Category </a>
+			
+			@if (Category.SubCategories !=null) //om Kategorin har subkategorier(inte är tom)
+			{
+				<ul>
+					@foreach (var SubCategory in Category.SubCategories)
+					{
+						<li>@SubCategory.Name</li>
+						<a asp-route-deleteSubCategoryId="@SubCategory.Id" class="btn btn-primary">Remove Subcategory </a>
+					}
+				</ul>
+			}
+			
+		</div>
+		<br />
+		
+
+	}
+}
+<h4>Add new Category</h4>
+@* CATEGORY *@
+<form method="post">
+	<label asp-for="Category.Name">Category Name</label>
+	<input asp-for="Category.Name" />
+	<input type="submit" name="submitButton" class="btn btn-success" value="AddCategory" />
+
+</form>
+<br />
+<br />
+<h4>Add new Subcategory</h4>
+@* SUBCATEGORY *@
+<form method="post">
+	<label asp-for="SubCategory.Name">Subcategory Name</label>
+	<input asp-for="SubCategory.Name" />
+
+	<label asp-for="SubCategory.CategoryId">Parent Category</label>
+	<select asp-for="SubCategory.CategoryId" asp-items="@(new SelectList(Model.Categories, "Id", "Name"))">
+		<option value="">Select Category</option>
+	</select>
+
+	<input type="submit" name="submitButton" class="btn btn-success" value="AddSubcategory" />
+</form>
+<br />
+<br />
+<h4>Add new Post</h4>
+@* POST *@
+<form method="post">
+	<label asp-for="Post.Title">Post Title</label>
+	<input asp-for="Post.Title" />
+	<br />
+    <textarea asp-for="Post.TextContext" cols="40" rows="5" ></textarea>
+	<br />
+
+	<label asp-for="Post.SubCategoryId">Parent SubCategory</label>
+	<select asp-for="Post.SubCategoryId" asp-items="@(new SelectList(Model.SubCategories, "Id", "Name"))">
+		<option value="">Select SubCategory</option>
+	</select>
+	<br />
+
+	<input type="submit" name="submitButton" class="btn btn-success" value="AddPost" />
+</form>
+
+@* REPORT PAGE*@
+<a asp-page="/RoleAdmin/ReportPage" class="btn btn-primary mt-3">Go to Report Page</a>
+
+
+
+
+

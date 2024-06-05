@@ -1,0 +1,56 @@
+﻿@page
+@model Forum.Pages.SubcategoryModel
+@{
+}
+
+<h3>@Model.SubCategory.Name</h3>
+
+<br>
+
+@if (Model.Posts != null && Model.Posts.Any())
+{
+    @foreach (var Post in Model.Posts)
+    {
+        <div class="post">
+        <a href="/Post?id=@Post.Id">
+            
+                <h5>@Post.Title</h5>
+                <p>@Post.TextContext</p>
+            
+        </a>
+        </div>
+    }
+}
+else
+{
+    <p>No posts available in this subcategory.</p>
+}
+
+<br />
+<br />
+@if (User.Identity.IsAuthenticated)
+{
+
+<h2>Add a new post in: @Model.SubCategory.Name</h2>
+    <form method="post" enctype="multipart/form-data">
+    <label asp-for="Post.Title">Post Title</label>
+    <input asp-for="Post.Title" />
+    <br />
+
+    <textarea asp-for="Post.TextContext" cols="40" rows="5"></textarea>
+    <br />
+
+        <div class="form-group">
+            <label for="PostImage">Upload Image</label>
+            <input type="file" class="form-control-file" id="PostImage" name="PostImage">
+        </div>
+        <br />
+
+    <input type="hidden" asp-for="Post.SubCategoryId" value="@Model.Id" /> 
+    <input type="submit" name="submitButton" class="btn btn-success" value="AddPost" />
+    </form>
+}
+else
+{
+    <p>You need to <a href="/Identity/Account/Login">login</a> to add a new post.</p>
+}

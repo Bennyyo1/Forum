@@ -1,0 +1,98 @@
+﻿@page
+@model Forum.Pages.RoleAdmin.ReportPageModel
+@{
+}
+<div>
+	<h3>Reported Posts</h3>
+	@if (Model.Posts != null && Model.Posts.Any())
+	{
+		@foreach (var post in Model.Posts)
+		{
+			<div class="card comment">
+				<div class="card-body">
+					<div class="d-flex align-items-start">
+
+						<img class="card-img-top profile-picture" src="~/userImages/@post.User.ProfilePicture" />
+
+						<div class="ml-5">
+							<p class="card-text">@post.TextContext</p>
+						</div>
+
+
+					</div>
+				</div>
+				<div class="card-footer">
+
+					<p>Commented by @post.User.NickName on @post.Date</p>
+
+					<form method="post" asp-page-handler="DeletePost" asp-route-postId="@post.Id">
+						<button type="submit" class="btn btn-danger">Delete Post</button>
+					</form>
+
+					<form method="post" asp-page-handler="UnreportPost" asp-route-postId="@post.Id">
+						<button type="submit" class="btn btn-primary">Unreport Post</button>
+					</form>
+
+				</div>
+
+
+
+
+
+
+			</div>
+		}
+
+	}
+	else
+	{
+		<p>No posts have been reported, what a wonderful day!</p>
+	}
+
+	<h3>Reported Comments</h3>
+	@if (Model.Comments != null && Model.Comments.Any())
+	{
+		@foreach (var comment in Model.Comments)
+		{
+			<div class="card comment">
+				<div class="card-body">
+					<div class="d-flex align-items-start">
+
+						<img class="card-img-top profile-picture" src="~/userImages/@comment.User.ProfilePicture" />
+
+						<div class="ml-5">
+							<p class="card-text">@comment.Text</p>
+						</div>
+
+
+					</div>
+				</div>
+				<div class="card-footer">
+
+					<p>Commented by @comment.User.NickName on @comment.Date</p>
+
+					<form method="post" asp-page-handler="DeleteComment" asp-route-commentId="@comment.Id">
+						<button type="submit" class="btn btn-danger">Delete Comment</button>
+					</form>
+
+					<form method="post" asp-page-handler="UnreportComment" asp-route-commentId="@comment.Id">
+						<button type="submit" class="btn btn-primary">Unreport Comment</button>
+					</form>
+
+				</div>
+
+
+
+
+
+
+			</div>
+		}
+	
+	}
+	else
+	{
+		<p>No comments have been reported, what a wonderful day!</p>
+	}
+</div>
+
